@@ -1,21 +1,26 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useFrame } from "@react-three/fiber";
-import { Box } from "@react-three/drei";
+import { Box, GizmoHelper, Grid, PivotControls } from "@react-three/drei";
 import * as THREE from "three";
+import { Tank } from "./entities/tank";
+import { DefaultLevel } from "./level/DefaultLevel";
+import { useControls } from "leva";
 
 export const Scene = () => {
-  const boxRef = useRef<THREE.Mesh | null>(null);
-  useFrame((state, delta) => {
-    if (boxRef.current) {
-      boxRef.current.rotation.y += 0.02;
-    }
+  const { pointx, pointy, pointz } = useControls({
+    pointx: 1,
+    pointy: 3,
+    pointz: 1,
   });
 
   return (
     <>
-      <Box ref={boxRef} args={[1, 1, 1]} rotation={[0.5, 0, 0]}>
-        <meshNormalMaterial />
-      </Box>
+      <Tank />
+      <Grid cellSize={1} cellThickness={1} infiniteGrid={true} sectionColor={"grey"} />
+
+      <pointLight position={[pointx, pointy, pointz]}></pointLight>
+
+      <DefaultLevel></DefaultLevel>
       <ambientLight />
     </>
   );

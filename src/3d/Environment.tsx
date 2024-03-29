@@ -9,7 +9,7 @@ export const Environment = () => {
     <>
       <Leva hidden={false}></Leva>
       <Canvas camera={{ fov: 70, position: [0, 0, 3] }}>
-        <OrbitControls />
+        <OrbitControls makeDefault />
         <Scene />
       </Canvas>
     </>
