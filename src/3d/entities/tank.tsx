@@ -22,11 +22,30 @@ export const Tank = () => {
   let angle = 0;
 
   const [, get] = useKeyboardControls();
+
   useEffect(() => {
     api.angle.subscribe((res) => {
       angle = res;
     });
+    api.linearDamping.set(.4);
+    api.angularDamping.set(.4);
   }, []);
+
+  const [ref, api] = useBox(() => (
+    {
+      mass: 10,
+      position: [0, 0],
+      args: [tankScaleX, tankScaleZ],
+      angularDamping: 1,
+      linearDamping: 1,
+      onCollide: (e) => {
+        console.log("collide", e);
+      },
+      material: {
+        id: 1,
+      },
+    }
+  ));
 
   useFrame(() => {
     const { forward, backward, left, right } = get();
@@ -48,22 +67,6 @@ export const Tank = () => {
       api.angle.set(angle + 0.1);
     }
   });
-
-  const [ref, api] = useBox(() => (
-    {
-      mass: 10,
-      position: [0, 0],
-      args: [tankScaleX, tankScaleZ],
-      angularDamping: 1,
-      linearDamping: 10000,
-      onCollide: (e) => {
-        console.log("collide", e);
-      },
-      material: {
-        id: 1,
-      },
-    }
-  ));
 
 
   return (

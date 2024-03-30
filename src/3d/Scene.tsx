@@ -27,7 +27,7 @@ export const Scene = () => {
           { name: "jump", keys: ["Space"] },
         ]}>
         <Physics normalIndex={1} gravity={[0, 0]}>
-          <Debug color="grey" scale={1.1} linewidth={0.001} normalIndex={1}>
+          <Debug color="grey" scale={1.1} linewidth={0.0025} normalIndex={1}>
             <DefaultLevel></DefaultLevel>
             <Tank />
           </Debug>
