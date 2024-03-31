@@ -1,18 +1,19 @@
 import { Box, RoundedBox, useKeyboardControls } from "@react-three/drei";
 import { useControls } from "leva";
-import { Vector3 } from "three";
+import { Group, Vector3 } from "three";
 import { Duplet, useBox } from "@react-three/p2";
-import { useFrame } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 
 interface TankProps {
   position: [number, number, number];
   color: string;
+  pointerPosition: Vector3;
 }
 
 const tankBaseScale: Vector3 = new Vector3(0.47, 0.22, 0.52);
 
-export const Tank = () => {
+export const Tank = (props: TankProps) => {
   const { tankScaleX, tankScaleY, tankScaleZ } = useControls("tanks", {
     tankScaleX: tankBaseScale.x,
     tankScaleY: tankBaseScale.y,
@@ -27,7 +28,7 @@ export const Tank = () => {
   const [, get] = useKeyboardControls();
   const { force, linearDamping, angularDamping, angularRatio } = useControls("tanks", {
     force: {
-      value: 5,
+      value: 11,
       step: 1,
       min: 1,
       max: 100,
@@ -39,7 +40,7 @@ export const Tank = () => {
       max: 1,
     },
     angularDamping: {
-      value: 0.9,
+      value: 0.95,
       step: 0.01,
       min: 0.1,
       max: 1,
@@ -51,6 +52,8 @@ export const Tank = () => {
       max: 5,
     },
   });
+  const turretRef = useRef<Group>();
+  const camera = useThree(state => state.camera);
 
   useEffect(() => {
     api.angle.subscribe((res) => {
@@ -101,8 +104,14 @@ export const Tank = () => {
       api.applyLocalForce([angularRatio / force, 0], propellantPositionLeft);
       api.applyLocalForce([-angularRatio / force, 0], propellantPositionRight);
     }
+    if (turretRef.current) {
+      const turret = turretRef.current;
+      if (props.pointerPosition) {
+        const lookAt = new Vector3(props.pointerPosition.x, tankScaleY, props.pointerPosition.z);
+        turret.lookAt(lookAt);
+      }
+    }
   });
-
 
   return (
     <>
@@ -113,16 +122,18 @@ export const Tank = () => {
                       bevelSegments={4}>
             <meshStandardMaterial color="orange" />
           </RoundedBox>
-          <RoundedBox
-            scale={[tankScaleX / 1.9, tankScaleY / 1.5, tankScaleX / 1.9]}
-            bevelSegments={4}
-            position={[0, tankScaleY + tankScaleY / 1.5 / 2, 0]}>
-            <meshStandardMaterial color="blue" />
-          </RoundedBox>
-          <Box scale={[tankScaleX / 7, tankScaleY / 3.6, tankScaleZ / 1.5]}
-               position={[0, tankScaleY + tankScaleY / 3.5, tankScaleZ / 2]}>
-            <meshStandardMaterial color="red" />
-          </Box>
+          <group ref={turretRef}>
+            <RoundedBox
+              scale={[tankScaleX / 1.9, tankScaleY / 1.5, tankScaleX / 1.9]}
+              bevelSegments={4}
+              position={[0, tankScaleY + tankScaleY / 1.5 / 2, 0]}>
+              <meshStandardMaterial color="blue" />
+            </RoundedBox>
+            <Box scale={[tankScaleX / 7, tankScaleY / 3.6, tankScaleZ / 1.5]}
+                 position={[0, tankScaleY + tankScaleY / 3.5, tankScaleZ / 2]}>
+              <meshStandardMaterial color="red" />
+            </Box>
+          </group>
         </group>
       </group>
     </>

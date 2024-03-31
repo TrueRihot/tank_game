@@ -4,6 +4,7 @@ import { Tank } from "./entities/tank";
 import { DefaultLevel } from "./level/DefaultLevel";
 import { useControls } from "leva";
 import { Debug, Physics } from "@react-three/p2";
+import { Vector3 } from "three";
 
 export const Scene = () => {
   const { pointx, pointy, pointz } = useControls({
@@ -11,6 +12,14 @@ export const Scene = () => {
     pointy: 3,
     pointz: 1,
   });
+
+  const pointerPosition: Vector3 = new Vector3(0, 0, 0);
+
+  function updatePointerPos(e: any) {
+    pointerPosition.x = e.point.x;
+    pointerPosition.y = e.point.y;
+    pointerPosition.z = e.point.z;
+  }
 
   return (
     <>
@@ -28,8 +37,10 @@ export const Scene = () => {
         ]}>
         <Physics normalIndex={1} gravity={[0, 0]}>
           <Debug color="grey" scale={1.1} linewidth={0.0025} normalIndex={1}>
-            <DefaultLevel></DefaultLevel>
-            <Tank />
+            <group onPointerMove={(e) => updatePointerPos(e)}>
+              <DefaultLevel></DefaultLevel>
+            </group>
+            <Tank pointerPosition={pointerPosition} position={[0, 0, 0]} color={"red"} />
           </Debug>
         </Physics>
       </KeyboardControls>
