@@ -22,9 +22,7 @@ export const Tank = (props: TankProps) => {
 
   const propellantPositionLeft: Duplet = [0, -tankScaleX];
   const propellantPositionRight: Duplet = [0, tankScaleX];
-
-  let angle = 0;
-
+  
   const [, get] = useKeyboardControls();
   const { force, linearDamping, angularDamping, angularRatio } = useControls("tanks", {
     force: {
@@ -34,13 +32,13 @@ export const Tank = (props: TankProps) => {
       max: 100,
     },
     linearDamping: {
-      value: 0.9,
+      value: 0.98,
       step: 0.01,
       min: 0.1,
       max: 1,
     },
     angularDamping: {
-      value: 0.95,
+      value: 0.98,
       step: 0.01,
       min: 0.1,
       max: 1,
@@ -107,7 +105,7 @@ export const Tank = (props: TankProps) => {
     if (turretRef.current) {
       const turret = turretRef.current;
       if (props.pointerPosition) {
-        const lookAt = new Vector3(props.pointerPosition.x, tankScaleY, props.pointerPosition.z);
+        const lookAt = new Vector3(props.pointerPosition.x, turret.position.y, props.pointerPosition.z);
         turret.lookAt(lookAt);
       }
     }
