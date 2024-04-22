@@ -22,7 +22,9 @@ export const Tank = (props: TankProps) => {
 
   const propellantPositionLeft: Duplet = [0, -tankScaleX];
   const propellantPositionRight: Duplet = [0, tankScaleX];
-  
+
+  let angle = 0;
+
   const [, get] = useKeyboardControls();
   const { force, linearDamping, angularDamping, angularRatio } = useControls("tanks", {
     force: {
