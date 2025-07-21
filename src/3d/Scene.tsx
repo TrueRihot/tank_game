@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid, KeyboardControls } from "@react-three/drei";
-import { Tank } from "./entities/tank";
 import { useControls } from "leva";
 import { Debug, Physics } from "@react-three/p2";
 import { Vector3 } from "three";
@@ -30,7 +29,7 @@ export const Scene = () => {
               { name: "backward", keys: ["ArrowDown", "s", "S"] },
               { name: "left", keys: ["ArrowLeft", "a", "A"] },
               { name: "right", keys: ["ArrowRight", "d", "D"] },
-              { name: "jump", keys: ["Space"] },
+              { name: "shoot", keys: ["Space"], up: true },
             ]}
           >
             <Physics normalIndex={1} gravity={[0, 0]}>

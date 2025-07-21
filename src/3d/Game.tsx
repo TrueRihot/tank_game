@@ -4,6 +4,7 @@ import { usePointer } from "./context/PointerContext";
 import { Tank } from "./entities/tank";
 import { DefaultLevel } from "./level/DefaultLevel";
 import { Shell } from "./entities/shell";
+import { useEffect } from "react";
 
 export const Game = () => {
   const { tanks, addTank, removeTank, shells } = useGame();
@@ -12,6 +13,10 @@ export const Game = () => {
   function updatePointerPos(e: ThreeEvent<PointerEvent>): void {
     setPointer(e.point);
   }
+
+  useEffect(() => {
+    console.log(shells);
+  }, [shells]);
 
   return (
     <>

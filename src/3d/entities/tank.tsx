@@ -42,7 +42,7 @@ export const Tank = (props: TankEntity) => {
   const turretRef = useRef<Group>(null);
   const [, get] = useKeyboardControls();
 
-  const { paused } = useGame();
+  const { paused, spawnShell } = useGame();
 
   useEffect(() => {
     api.linearDamping.set(linearDamping);
@@ -50,7 +50,7 @@ export const Tank = (props: TankEntity) => {
   }, [linearDamping, angularDamping, api]);
 
   const updateViaPlayerControls = () => {
-    const { forward, backward, left, right } = get();
+    const { forward, backward, left, right, shoot } = get();
 
     if (forward) {
       api.applyLocalForce([force, 0], propellantPositions.left);
@@ -72,6 +72,18 @@ export const Tank = (props: TankEntity) => {
     if (turretRef.current && props.pointerPosition) {
       const target = new Vector3(props.pointerPosition.x, turretRef.current.position.y, props.pointerPosition.z);
       turretRef.current.lookAt(target);
+    }
+    if (shoot) {
+      console.log(ref.current?.getWorldPosition(new Vector3()));
+      const newShellPosition = ref.current?.getWorldPosition(new Vector3());
+      if (!newShellPosition) return;
+      // calculate the vector to the pointer position
+      const direction = new Vector3(
+        props.pointerPosition!.x - newShellPosition.x,
+        0,
+        props.pointerPosition!.z - newShellPosition.z
+      ).normalize();
+      spawnShell([newShellPosition.x, newShellPosition.z], [direction.x, direction.z]);
     }
   };
 
