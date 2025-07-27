@@ -4,4 +4,5 @@ export interface ShellEntity {
   id: string;
   position: Duplet;
   direction: Duplet;
+  baseSpeed?: number;
 }

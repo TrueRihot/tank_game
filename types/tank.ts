@@ -7,4 +7,5 @@ export interface TankEntity {
   color: string;
   isPlayer: boolean;
   pointerPosition?: Vector3;
+  reloadCooldown?: number;
 }

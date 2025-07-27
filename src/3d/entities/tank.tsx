@@ -3,13 +3,20 @@ import { useControls } from "leva";
 import { Group, Vector3 } from "three";
 import { Duplet, useBox } from "@react-three/p2";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGame } from "../context/GameContext";
 import { TankEntity } from "../../../types/tank";
 
 const tankBaseScale: Vector3 = new Vector3(0.47, 0.22, 0.52);
 
-export const Tank = (props: TankEntity) => {
+export const Tank = ({
+  position,
+  color,
+  isPlayer,
+  pointerPosition,
+  reloadCooldown = 1000, // Default reload cooldown
+  id,
+}: TankEntity) => {
   const { tankScaleX, tankScaleY, tankScaleZ } = useControls("tanks", {
     tankScaleX: tankBaseScale.x,
     tankScaleY: tankBaseScale.y,
@@ -22,8 +29,9 @@ export const Tank = (props: TankEntity) => {
     args: [tankScaleX, tankScaleZ],
     angularDamping: 11,
     linearDamping: 11,
+    name: id,
     material: {
-      id: 1,
+      id: 5000,
     },
   }));
 
@@ -41,6 +49,7 @@ export const Tank = (props: TankEntity) => {
 
   const turretRef = useRef<Group>(null);
   const [, get] = useKeyboardControls();
+  const [lastShotTime, setLastShotTime] = useState<number>(Date.now());
 
   const { paused, spawnShell } = useGame();
 
@@ -69,34 +78,30 @@ export const Tank = (props: TankEntity) => {
       api.applyLocalForce([-angularRatio / force, 0], propellantPositions.right);
     }
 
-    if (turretRef.current && props.pointerPosition) {
-      const target = new Vector3(props.pointerPosition.x, turretRef.current.position.y, props.pointerPosition.z);
+    if (turretRef.current && pointerPosition) {
+      const target = new Vector3(pointerPosition.x, turretRef.current.position.y, pointerPosition.z);
       turretRef.current.lookAt(target);
     }
-    if (shoot) {
-      console.log(ref.current?.getWorldPosition(new Vector3()));
+    if (shoot && lastShotTime + reloadCooldown! < Date.now()) {
       const newShellPosition = ref.current?.getWorldPosition(new Vector3());
       if (!newShellPosition) return;
       // calculate the vector to the pointer position
-      const direction = new Vector3(
-        props.pointerPosition!.x - newShellPosition.x,
-        0,
-        props.pointerPosition!.z - newShellPosition.z
-      ).normalize();
+      const direction = new Vector3(pointerPosition!.x - newShellPosition.x, 0, pointerPosition!.z - newShellPosition.z).normalize();
       spawnShell([newShellPosition.x, newShellPosition.z], [direction.x, direction.z]);
+      setLastShotTime(Date.now());
     }
   };
 
   useFrame(() => {
     if (paused) return;
-    if (props.isPlayer) updateViaPlayerControls();
+    if (isPlayer) updateViaPlayerControls();
   });
 
   return (
-    <group position={[props.position[0], 0, props.position[1]]} ref={ref}>
+    <group position={[position[0], 0, position[1]]} ref={ref} userData={{ id, isPlayer }}>
       <group rotation-y={Math.PI / 2}>
         <RoundedBox castShadow position={[0, tankScaleY / 2, 0]} scale={[tankScaleX, tankScaleY, tankScaleZ]} bevelSegments={4}>
-          <meshStandardMaterial color={props.color} />
+          <meshStandardMaterial color={color} />
         </RoundedBox>
 
         <group ref={turretRef}>

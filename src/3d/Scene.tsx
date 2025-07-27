@@ -23,20 +23,21 @@ export const Scene = () => {
           <Grid cellSize={1} cellThickness={1} infiniteGrid={true} sectionColor={"grey"} />
           <directionalLight castShadow position={[pointx, pointy, pointz]}></directionalLight>
           <ambientLight />
-          <KeyboardControls
-            map={[
-              { name: "forward", keys: ["ArrowUp", "w", "W"] },
-              { name: "backward", keys: ["ArrowDown", "s", "S"] },
-              { name: "left", keys: ["ArrowLeft", "a", "A"] },
-              { name: "right", keys: ["ArrowRight", "d", "D"] },
-              { name: "shoot", keys: ["Space"], up: true },
-            ]}
-          >
-            <Physics normalIndex={1} gravity={[0, 0]}>
-              <Debug color='grey' scale={1.1} linewidth={0.0025} normalIndex={1}></Debug>
+
+          <Physics normalIndex={1} gravity={[0, 0]}>
+            <KeyboardControls
+              map={[
+                { name: "forward", keys: ["ArrowUp", "w", "W"] },
+                { name: "backward", keys: ["ArrowDown", "s", "S"] },
+                { name: "left", keys: ["ArrowLeft", "a", "A"] },
+                { name: "right", keys: ["ArrowRight", "d", "D"] },
+                { name: "shoot", keys: ["Space"], up: true },
+              ]}
+            >
+              <Debug color='red' scale={1.1} linewidth={1} normalIndex={1} />
               <Game />
-            </Physics>
-          </KeyboardControls>
+            </KeyboardControls>
+          </Physics>
         </GameProvider>
       </PointerProvider>
     </>
