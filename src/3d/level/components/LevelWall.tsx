@@ -11,11 +11,10 @@ interface LevelWallProps {
 
 export const LevelWall = ({ scale, position }: LevelWallProps) => {
   const [wallRef, api] = useBox(() => (
-    { mass: 100, type: "Static", position: [position.x, position.z], args: [scale.x, scale.z] }
-  ));
+    { mass: 0, type: "Static", position: [position.x, position.z], args: [scale.x, scale.z] }
+  ), null, []);
   return (
-    <Box scale={scale}
-         position={position}>
+    <Box ref={wallRef} scale={scale} position={position}>
       <meshStandardMaterial color="grey" />
     </Box>
   );

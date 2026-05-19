@@ -17,7 +17,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     },
     {
       id: "ai-1",
-      position: [5, 5],
+      position: [5, 3],
       color: "green",
       isPlayer: false,
     },

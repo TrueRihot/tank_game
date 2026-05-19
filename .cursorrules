@@ -1,0 +1,29 @@
+# Tank Game Development Guidelines (AI Agents & Editors)
+
+This repository contains a 3D Tank Game built with **React Three Fiber (R3F)**, **Drei**, and **@react-three/p2** physics. 
+
+## 🏗️ Architecture Reference
+- [App.jsx](file:///c:/Users/morit/vscode_repos/tank_game/src/App.jsx): Entry point.
+- [Environment.tsx](file:///c:/Users/morit/vscode_repos/tank_game/src/3d/Environment.tsx): Renders Drei's Canvas, camera parameters, and Leva controls.
+- [Scene.tsx](file:///c:/Users/morit/vscode_repos/tank_game/src/3d/Scene.tsx): Defines lighting, grid helpers, the physics simulation context (`Physics`), keyboard bindings, and context providers.
+- [GameContext.tsx](file:///c:/Users/morit/vscode_repos/tank_game/src/3d/context/GameContext.tsx): Global state manager for active tanks, shells, and game loop state.
+- [Game.tsx](file:///c:/Users/morit/vscode_repos/tank_game/src/3d/Game.tsx): Coordinates and maps active entity data from context to R3F components.
+
+## ⚙️ Physics Implementation Rules (`@react-three/p2`)
+
+### 1. Hook Dependency Array Requirement
+When using rigid body hooks (e.g. `useBox`, `useCircle`) from `@react-three/p2`, you must supply a second argument `fwdRef` (usually `null`) and a stable dependency array `deps` (usually `[]`) as the third argument.
+*   **Standard Pattern**:
+    ```typescript
+    const [ref, api] = useBox(() => ({
+      mass: 10,
+      position: [position[0], position[1]],
+      args: [width, depth],
+    }), null, []);
+    ```
+*   *Why*: If the dependency array is omitted or `undefined`, the physics body is deleted and re-registered in the web worker on every frame, causing severe performance issues and model rendering drops.
+
+### 2. Plane Coordinate Mapping
+*   The physics plane normal is configured as the Y-axis (`normalIndex={1}` in [Scene.tsx](file:///c:/Users/morit/vscode_repos/tank_game/src/3d/Scene.tsx)).
+*   This maps the 2D physics engine coordinates `[x, y]` to the 3D scene's horizontal plane `[x, z]`.
+*   All physics positions and velocities utilize 2D coordinate lists (`[number, number]`).
