@@ -5,27 +5,39 @@ import { GameContextType, Levels } from "../../../types/game";
 import { ShellEntity } from "../../../types/shell";
 import { TankEntity } from "../../../types/tank";
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+export type Screen = "menu" | "game" | "controls" | "settings";
+
+export interface ExtendedGameContextType extends GameContextType {
+  activeScreen: Screen;
+  setActiveScreen: (screen: Screen) => void;
+  startGame: () => void;
+  pauseGame: () => void;
+  resumeGame: () => void;
+  returnToMenu: () => void;
+}
+
+const GameContext = createContext<ExtendedGameContextType | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [tanks, setTanks] = useState<TankEntity[]>([
     {
       id: "player-1",
       position: [0, 0],
-      color: "red",
+      color: "#00f7ff",
       isPlayer: true,
     },
     {
       id: "ai-1",
       position: [5, 3],
-      color: "green",
+      color: "#d05bff",
       isPlayer: false,
     },
   ]);
 
   const [shells, setShells] = useState<ShellEntity[]>([]);
-  const level: Levels = "Default"; // Hardcoded for now, can be extended later
+  const level: Levels = "Default";
   const [paused, setPaused] = useState(false);
+  const [activeScreen, setActiveScreen] = useState<Screen>("menu");
 
   const spawnShell = useCallback((origin: Duplet, direction: Duplet) => {
     setShells(prev => [
@@ -50,6 +62,25 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setTanks(prev => prev.filter(tank => tank.id !== id));
   }, []);
 
+  const startGame = useCallback(() => {
+    setPaused(false);
+    setActiveScreen("game");
+  }, []);
+
+  const pauseGame = useCallback(() => {
+    setPaused(true);
+  }, []);
+
+  const resumeGame = useCallback(() => {
+    setPaused(false);
+    setActiveScreen("game");
+  }, []);
+
+  const returnToMenu = useCallback(() => {
+    setPaused(true);
+    setActiveScreen("menu");
+  }, []);
+
   const value = useMemo(
     () => ({
       tanks,
@@ -60,8 +91,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       removeTank,
       paused,
       level,
+      activeScreen,
+      setActiveScreen,
+      startGame,
+      pauseGame,
+      resumeGame,
+      returnToMenu,
     }),
-    [tanks, shells, spawnShell, removeShell, addTank, removeTank, paused, level]
+    [tanks, shells, spawnShell, removeShell, addTank, removeTank, paused, level, activeScreen, setActiveScreen, startGame, pauseGame, resumeGame, returnToMenu]
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
