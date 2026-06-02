@@ -72,11 +72,11 @@ const MainMenu = () => {
             shield
           </span>
           <h1 className="font-outfit text-display-lg-mob md:text-display-lg uppercase text-[#efffff] text-glow-primary">
-            Armor Corps
+            Tiny Shells
           </h1>
         </div>
         <p className="font-outfit text-label-sm uppercase tracking-[0.3em] text-[#849494]">
-          Tactical Tank Combat
+          Inspired by Wii Play Tanks
         </p>
       </div>
 
@@ -95,7 +95,7 @@ const MainMenu = () => {
 
       {/* Footer */}
       <div className="absolute bottom-6 font-outfit text-label-sm text-[#3a4a4a] uppercase tracking-widest">
-        v1.0 · Kinetic Strike Engine
+        v1.0 · Tiny Shells Engine
       </div>
     </div>
   );
@@ -253,7 +253,7 @@ const GameplayHUD = () => {
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-[#00f7ff] text-2xl">shield</span>
           <span className="font-outfit text-title-lg uppercase tracking-[0.15em] text-[#efffff]">
-            Armor Corps
+            Tiny Shells
           </span>
         </div>
 

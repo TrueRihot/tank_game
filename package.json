@@ -1,7 +1,7 @@
 {
   "name": "tank_game",
   "version": "1.0.0",
-  "description": "Tank Game",
+  "description": "Tiny Shells - A 3D tank combat game inspired by Wii Play Tanks",
   "keywords": [
     "r3f",
     "react",
@@ -11,7 +11,7 @@
   ],
   "author": "TrueRihot",
   "repository": "github:TrueRihot/tank_game",
-  "license": "MIT",
+
   "dependencies": {
     "@react-three/drei": "10.7.7",
     "@react-three/fiber": "9.6.1",

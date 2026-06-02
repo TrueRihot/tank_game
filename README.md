@@ -1,6 +1,6 @@
-# 🛡️ Armor Corps — Tactical Tank Combat
+# 🐚 Tiny Shells
 
-A real-time 3D top-down tank combat game built with **React Three Fiber**, **p2.js physics**, and **Vite**. Drive tanks, aim with your mouse, and fire shells across a walled arena.
+A real-time 3D top-down tank combat game inspired by **Wii Play Tanks**, built with **React Three Fiber**, **p2.js physics**, and **Vite**. Drive tanks, aim with your mouse, and fire shells across a walled arena.
 
 ![Preview](/public/preview.gif)
 
@@ -9,6 +9,7 @@ A real-time 3D top-down tank combat game built with **React Three Fiber**, **p2.
 ## 🎮 Gameplay
 
 - **Top-down 3D perspective** — an overhead camera looks down at a flat arena rendered in full 3D.
+- **Wii Play Tanks-inspired** — navigate an enclosed arena, dodge enemy fire, and take out opponents with careful aim and positioning.
 - **Player-controlled tank** — move and rotate using keyboard input; aim the turret with the mouse cursor.
 - **Projectile combat** — fire kinematic shells that travel in a straight line from the barrel tip.
 - **Physics-driven movement** — tank movement is force-based via `p2.js`, with configurable damping and angular ratios for a weighty, realistic feel.
@@ -92,8 +93,7 @@ tank_game/
 │   └── pointer.ts             # Pointer type definitions
 ├── package.json
 ├── vite.config.js
-├── tailwind.config.js
-└── LICENSE                    # MIT
+└── tailwind.config.js
 ```
 
 ---
@@ -170,14 +170,9 @@ With [Leva](https://github.com/pmndrs/leva) panels, you can tune the following a
 - [ ] AI tank behavior (pathfinding, target selection)
 - [ ] Health system & tank destruction
 - [ ] Shell-to-tank collision detection & damage
+- [ ] Shell bouncing off walls (like Wii Play!)
 - [ ] Multiple levels / procedural arenas
 - [ ] Sound effects & music
 - [ ] Settings screen functionality (volume, graphics, sensitivity)
 - [ ] Score tracking & game-over screen
 - [ ] Power-ups & different shell types
-
----
-
-## 📄 License
-
-[MIT](./LICENSE) — Originally scaffolded from the React Three Fiber + Vite starter by Benjamin Miles.
